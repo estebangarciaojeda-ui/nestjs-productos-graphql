@@ -27,6 +27,21 @@ Contra `https://nestjs-productos-api.onrender.com/api/v1/productos` (ids 1, 3 y 
 - `productosBaratos(precioMaximo: 50)` devuelve 1 producto (Teclado mecánico, 45.9); con `100` devuelve 2.
 - `productoPorId(id: 2)` produce un error (la API responde 404).
 
+## Prueba con 10.000 productos
+
+`src/productos/datos-prueba.ts` genera 10.000 productos (`Producto de prueba 1` … `10000`, precios entre 1 y 5000, generados con un LCG determinista para que sean iguales en cada arranque). Se activan con la variable de entorno `USAR_DATOS_PRUEBA=true`; sin ella, el resolver sigue usando la API REST y los resultados de la guía no cambian.
+
+Medido en local con la variable activada:
+
+| Query | Resultado | Tiempo |
+|---|---|---|
+| `productos { id nombre precio }` | 10.000 filas, 634 KB | ≈ 0,34 s |
+| `productosBaratos(precioMaximo: 50)` | 103 filas | ms |
+| `productoPorId(id: 10000)` | "Producto de prueba 10000" | ≈ 0,06 s |
+| `productoPorId(id: 10001)` | `null` | ms |
+
+Con este volumen se nota la ventaja de GraphQL: `productos { nombre }` devuelve solo el nombre de cada producto, no el objeto completo.
+
 ## REST frente a GraphQL
 
 Para "todos los productos, solo nombres, más el detalle de uno", con REST necesitaría **2 llamadas**: `GET /api/v1/productos` (que devuelve el objeto completo aunque solo quiera el nombre) y `GET /api/v1/productos/{id}` (endpoint distinto). Con GraphQL se resuelve en **1 petición** pidiendo exactamente los campos necesarios (`productos { nombre }` y `productoPorId(id: 4) { ... }` pueden ir en la misma query).
