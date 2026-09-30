@@ -1,5 +1,10 @@
 # Bitácora — Práctica 4: servidor GraphQL (NestJS)
 
+**URL pública (Render):** https://nestjs-productos-graphql-c0u6.onrender.com/graphql
+**Repositorio:** https://github.com/estebangarciaojeda-ui/nestjs-productos-graphql
+
+> Plan gratuito de Render: si el servicio lleva un rato sin uso, la primera petición tarda unos segundos en responder.
+
 ## Qué se construyó
 
 Un servidor GraphQL code-first con NestJS (`@nestjs/graphql` + Apollo, puerto 3000, Apollo Sandbox en `/graphql`) que expone tres queries sobre `Producto` y obtiene los datos de la API REST pública de productos mediante `HttpService`:
